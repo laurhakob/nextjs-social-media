@@ -15,7 +15,7 @@ export function useSubmitPostMutation() {
 
   const queryClient = useQueryClient();
 
-  const mutationn = useMutation({
+  const mutation = useMutation({
     mutationFn: submitPost,
     onSuccess: async (newPost) => {
       const queryFilter: QueryFilters = { queryKey: ["post-feed", "for-you"] };
@@ -62,5 +62,5 @@ export function useSubmitPostMutation() {
     },
   });
 
-  return mutationn;
+  return mutation;
 }
