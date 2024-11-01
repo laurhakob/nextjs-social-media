@@ -31,6 +31,8 @@ model User {
   likes         Like[]
   bookmarks     Bookmark[]
   comments      Comment[]
+  receivedNotifications Notification[] @relation("Recipient")
+  issuedNotifications Notification[] @relation("Issuer")
 
 
 
@@ -71,6 +73,7 @@ model Post {
   likes       Like[]
   bookmarks   Bookmark[]
   comments    Comment[]
+  linkedNotifications Notification[]
   
   createdAt DateTime @default(now())
 
@@ -96,39 +99,63 @@ enum MediaType {
 }
 
 model Comment {
-  id          String @id @default(cuid())
+  id          String  @id @default(cuid())
   content     String
   userId      String
-  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   postId      String
-  post        Post  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post        Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
+  createdAt   DateTime @default(now())
 
 
   @@map("comments")
 }
 
 model Like {
-  userId String
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  postId String
-  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId    String
+  post      Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([userId, postId])
   @@map("likes")
 }
 
 model Bookmark {
-  id     String @id @default(cuid())
-  userId String
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  postId String
-  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  id        String       @id @default(cuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId    String
+  post      Post         @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
+  createdAt DateTime     @default(now())
 
 
   @@unique([userId, postId])
   @@map("bookmarks")
+}
+
+model Notification {
+  id                String          @id @default(cuid())
+  recipientId       String
+  recipient         User            @relation("Recipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  issuerId          String 
+  issuer            User            @relation("Issuer", fields: [issuerId], references: [id], onDelete: Cascade)
+  postId            String?
+  post              Post?           @relation(fields: [postId], references: [id], onDelete: Cascade)
+  type              NotificationType
+  read              Boolean         @default(false)
+
+  createdAt         DateTime        @default(now())
+
+  @@map("notifications")
+
+
+}
+
+enum NotificationType {
+  LIKE
+  FOLLOW
+  COMMENT
 }
