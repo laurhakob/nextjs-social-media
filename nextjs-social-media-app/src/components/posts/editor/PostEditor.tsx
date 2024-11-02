@@ -1,20 +1,20 @@
 "use client";
 
+import { useSession } from "@/app/(main)/SessionProvider";
+import LoadingButton from "@/components/LoadingButton";
+import { Button } from "@/components/ui/button";
+import UserAvatar from "@/components/UserAvatar";
+import { cn } from "@/lib/utils";
+import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
-import UserAvatar from "@/components/UserAvatar";
-import { useSession } from "@/app/(main)/SessionProvider";
-import "./styles.css";
-import { useSubmitPostMutation } from "./mutations";
-import LoadingButton from "@/components/LoadingButton";
-import useMediaUpload, { Attachment } from "./useMediaUpload";
-import { ClipboardEvent, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { ImageIcon, Loader2, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { useDropzone } from "@uploadthing/react";
+import { ImageIcon, Loader2, X } from "lucide-react";
+import Image from "next/image";
+import { ClipboardEvent, useRef } from "react";
+import { useSubmitPostMutation } from "./mutations";
+import "./styles.css";
+import useMediaUpload, { Attachment } from "./useMediaUpload";
 
 export default function PostEditor() {
   const { user } = useSession();
@@ -34,7 +34,7 @@ export default function PostEditor() {
     onDrop: startUpload,
   });
 
-  const { onClick, ...RootProps } = getRootProps();
+  const { onClick, ...rootProps } = getRootProps();
 
   const editor = useEditor({
     extensions: [
@@ -46,7 +46,6 @@ export default function PostEditor() {
         placeholder: "What's crack-a-lackin'?",
       }),
     ],
-    immediatelyRender: false,
   });
 
   const input =
@@ -54,7 +53,7 @@ export default function PostEditor() {
       blockSeparator: "\n",
     }) || "";
 
-  async function onSubmit() {
+  function onSubmit() {
     mutation.mutate(
       {
         content: input,
@@ -80,7 +79,7 @@ export default function PostEditor() {
     <div className="flex flex-col gap-5 rounded-2xl bg-card p-5 shadow-sm">
       <div className="flex gap-5">
         <UserAvatar avatarUrl={user.avatarUrl} className="hidden sm:inline" />
-        <div {...RootProps} className="w-full">
+        <div {...rootProps} className="w-full">
           <EditorContent
             editor={editor}
             className={cn(
