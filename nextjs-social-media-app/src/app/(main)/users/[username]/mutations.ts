@@ -1,4 +1,4 @@
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { useUploadThing } from "@/lib/uploadthing";
 import { UpdateUserProfileValues } from "@/lib/validation";
 import {
@@ -70,17 +70,16 @@ export function useUpdateProfileMutation() {
       router.refresh();
 
       toast({
-        description: "Profile updated"
-      })
+        description: "Profile updated",
+      });
     },
     onError(error) {
       console.error(error);
       toast({
         variant: "destructive",
         description: "Failed to updated profile. Please try again.",
-      })
-      
-    }
+      });
+    },
   });
 
   return mutation;

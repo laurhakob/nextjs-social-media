@@ -7,7 +7,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { submitPost } from "./actions";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { PostsPage } from "@/lib/types";
 import { useSession } from "@/app/(main)/SessionProvider";
 
@@ -30,7 +30,7 @@ export function useSubmitPostMutation() {
               query.queryKey.includes(user.id))
           );
         },
-      } satisfies QueryFilters
+      } satisfies QueryFilters;
 
       await queryClient.cancelQueries(queryFilter);
 

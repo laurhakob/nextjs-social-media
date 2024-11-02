@@ -6,7 +6,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { deleteComment, submitComment } from "./actions";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 export function useSubmitCommentMutation(postId: string) {
   const { toast } = useToast();
